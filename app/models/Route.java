@@ -1,6 +1,6 @@
 package models;
 
-public class Route {
+public class Route extends Entity {
 
 	private Location origin;
 	private Location destination;

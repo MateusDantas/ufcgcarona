@@ -1,6 +1,6 @@
 package models;
 
-public class Location {
+public class Location extends Entity {
 
 	private String streetName;
 	private String sectionName;

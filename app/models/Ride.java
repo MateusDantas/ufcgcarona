@@ -2,7 +2,7 @@ package models;
 
 import java.util.Date;
 
-public class Ride {
+public class Ride extends Entity {
 
 	private Route route;
 	private Passenger passenger;
