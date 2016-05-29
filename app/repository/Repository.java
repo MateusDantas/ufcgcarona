@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -13,13 +12,9 @@ public interface Repository<T extends Entity> {
 	
 	Set<T> query(Predicate<T> query);
 	
-	void save(T entity);
+	boolean save(T entity);
 	
-	void save(Collection<T> entities);
+	boolean remove(T entity);
 	
-	void remove(T entity);
-	
-	void remove(Collection<T> entities);
-	
-	void remove(String id);
+	boolean remove(String id);
 }

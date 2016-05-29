@@ -9,5 +9,7 @@ scalaVersion := "2.11.7"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "javax.inject" % "javax.inject" % "1",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )

@@ -11,6 +11,7 @@ public class Ride extends Entity {
 	private Date estimatedDeparture;
 	private Date estimatedArrival;
 	
+	private int vacancy;
 	private int rideCost;
 
 	public Route getRoute() {
@@ -59,6 +60,14 @@ public class Ride extends Entity {
 
 	public void setRideCost(int rideCost) {
 		this.rideCost = rideCost;
+	}
+
+	public int getVacancy() {
+		return vacancy;
+	}
+
+	public void setVacancy(int vacancy) {
+		this.vacancy = vacancy;
 	}
 	
 	

@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -24,31 +23,23 @@ public abstract class InMemoryRepository<T extends Entity> implements Repository
 	}
 
 	@Override
-	public void save(T entity) {
+	public boolean save(T entity) {
 		if (memory.contains(entity))
 			memory.remove(entity);
-		memory.add(entity);
+		return memory.add(entity);
 	}
 
 	@Override
-	public void save(Collection<T> entities) {
-		entities.forEach(this::save);
-	}
-
-	@Override
-	public void remove(T entity) {
+	public boolean remove(T entity) {
 		if (memory.contains(entity))
-			memory.remove(entity);
+			return memory.remove(entity);
+		return false;
 	}
 
 	@Override
-	public void remove(Collection<T> entities) {
-		entities.forEach(this::remove);
-	}
-
-	@Override
-	public void remove(String id) {
-		this.get(id).ifPresent(this::remove);
+	public boolean remove(String id) {
+		T entity = this.get(id).get();
+		return this.remove(entity);
 	}
 
 }
