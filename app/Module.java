@@ -1,9 +1,14 @@
 import com.google.inject.AbstractModule;
-import java.time.Clock;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 
-import services.ApplicationTimer;
-import services.AtomicCounter;
-import services.Counter;
+import models.User;
+import repository.Repository;
+import repository.UserInMemoryRepository;
+import services.RealUserService;
+import services.UserService;
+import validators.UserValidator;
+import validators.Validator;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -19,13 +24,19 @@ public class Module extends AbstractModule {
 
     @Override
     public void configure() {
-        // Use the system clock as the default implementation of Clock
-        bind(Clock.class).toInstance(Clock.systemDefaultZone());
-        // Ask Guice to create an instance of ApplicationTimer when the
-        // application starts.
-        bind(ApplicationTimer.class).asEagerSingleton();
-        // Set AtomicCounter as the implementation for Counter.
-        bind(Counter.class).to(AtomicCounter.class);
+    	
+    	bind(new TypeLiteral<Repository<User>>() {})
+    		.annotatedWith(Names.named("UserRepository"))
+    		.to(UserInMemoryRepository.class)
+    		.asEagerSingleton();
+        
+    	bind(new TypeLiteral<Validator<User>>() {})
+    		.annotatedWith(Names.named("UserValidator"))
+    		.to(UserValidator.class);
+    		
+    	bind (UserService.class)
+    		.to(RealUserService.class)
+    		.asEagerSingleton();
     }
 
 }

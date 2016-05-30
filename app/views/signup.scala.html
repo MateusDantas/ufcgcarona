@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>UFCG Carona - SignUp</title>
+    <center><h1>Sistemas de Informação 1</h1></center>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <section>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Signup</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Para realizar o cadastro no sistema, preencha os dados abaixo e aperte 'Submit' quando tudo estiver pronto.</p>
+                    <p><b>Note que sua matricula deve ser uma matricula valida oferecida pela universidade.</b></p>
+                    <form role="form" action="@routes.SignupController.register()" enctype="multipart/form-data" method="post">
+					  @if(flash.containsKey("success")){
+					  @flash.get("success")
+					  }
+					  @if(flash.containsKey("error")){
+					  @flash.get("error")
+					  }
+                      <div class="form-group">
+                            <input type="text" name="name" placeholder="Full Name" pattern=".{3,10}" required>
+                        </div>
+                        <div class="form-group">
+                          <input type="text" name="registrationId" placeholder="RegistrationId (matricula)" pattern="11[0-9]{1}110[0-9]{3}" required>
+                        </div>
+						<div class="form-group">
+						  <input type="text" name="course" placeholder="Course" required>
+						</div>
+						
+                        <div class="form-group">
+                          <input type="password" name="password" id="password" placeholder="Password" pattern=".{6,60}" required>
+						  <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+						  <script>
+							var password = document.getElementById("password");
+							var confirm_password = document.getElementById("confirm_password");
+							
+							function validatePassword(){
+							if(password.value != confirm_password.value) {
+							confirm_password.setCustomValidity("Passwords Don't Match");
+							} else {
+							  confirm_password.setCustomValidity('');
+							}
+							}
+							
+							password.onchange = validatePassword;
+							confirm_password.onkeyup = validatePassword;
+						  </script>
+                        </div>
+						
+						
+                        <input type="submit" class="btn btn-success">
+                        <br> <br>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+	
+</body>
+</html>

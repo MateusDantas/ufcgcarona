@@ -1,11 +1,12 @@
 package models;
 
 import java.util.Date;
+import java.util.Set;
 
 public class Ride extends Entity {
 
 	private Route route;
-	private Passenger passenger;
+	private Set<Passenger> passengers;
 	private Driver driver;
 	
 	private Date estimatedDeparture;
@@ -22,12 +23,12 @@ public class Ride extends Entity {
 		this.route = route;
 	}
 
-	public Passenger getPassenger() {
-		return passenger;
+	public Set<Passenger> getPassenger() {
+		return passengers;
 	}
 
-	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
+	public void setPassengers(Set<Passenger> passengers) {
+		this.passengers = passengers;
 	}
 
 	public Driver getDriver() {

@@ -1,45 +1,52 @@
 package services;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import exceptions.DatabaseError;
-import exceptions.InvalidUserData;
+import exceptions.UserAlreadyRegistered;
+import exceptions.ValidateError;
 import models.User;
+import play.Logger;
 import repository.Repository;
 import validators.Validator;
 
+@Singleton
 public class RealUserService implements UserService {
 
 	private Repository<User> userRepository;
 	private Validator<User> userValidator;
-	
+
 	@Inject
-	public RealUserService(Repository<User> userRepository, Validator<User> userValidator) {
+	public RealUserService(@Named("UserRepository") Repository<User> userRepository,
+			@Named("UserValidator") Validator<User> userValidator) {
 		this.userRepository = userRepository;
 		this.userValidator = userValidator;
 	}
-	
+
 	@Override
-	public User registerUser(User user) throws InvalidUserData, DatabaseError {
-		if (userValidator.validate(user)) {
-			String salt = BCrypt.gensalt();
-			String encryptedPassword = BCrypt.hashpw(user.getPassword(), salt);
-			user.setSalt(salt);
-			user.setPassword(encryptedPassword);
-			boolean ok = this.userRepository.save(user);
-			if (!ok) {
-				throw new DatabaseError("Could not save entity to database");
-			}
-			return user;
-		} else {
-			throw new InvalidUserData("User input supplied is invalid!");
+	public User registerUser(User user) throws ValidateError, DatabaseError, UserAlreadyRegistered {
+		if (this.getByRegistrationId(user.getRegistrationId()).isPresent()) {
+			throw new UserAlreadyRegistered("There is a user already registered with that registration id");
 		}
+		userValidator.validate(user);
+		String salt = BCrypt.gensalt();
+		String encryptedPassword = BCrypt.hashpw(user.getPassword(), salt);
+		user.setSalt(salt);
+		user.setPassword(encryptedPassword);
+		boolean ok = this.userRepository.save(user);
+		if (!ok) {
+			throw new DatabaseError("Could not save entity to database");
+		}
+		return user;
 	}
 
 	@Override
@@ -48,15 +55,30 @@ public class RealUserService implements UserService {
 	}
 
 	@Override
+	public Optional<User> getByRegistrationId(String registrationId) {
+		Optional<User> result = Optional.empty();
+		try {
+			User user = this.userRepository.query(entity -> registrationId.equals(entity.getRegistrationId())).iterator()
+					.next();
+			result = Optional.of(user);
+		} catch (NoSuchElementException e) {
+		}
+
+		return result;
+	}
+
+	@Override
 	public Set<User> getUsers(Predicate<User> query) {
 		return this.userRepository.query(query);
 	}
 
 	@Override
-	public boolean authenticateUser(String registrationId, String password) throws NoSuchElementException {
-		User user = this.userRepository.query(
-				entity -> entity.getRegistrationId() == registrationId).iterator().next();
-		return BCrypt.checkpw(password, user.getPassword());
+	public boolean authenticateUser(String registrationId, String password) {
+		Optional<User> result = this.getByRegistrationId(registrationId);
+		if (!result.isPresent()) {
+			return false;
+		}
+		return BCrypt.checkpw(password, result.get().getPassword());
 	}
 
 }

@@ -1,13 +1,13 @@
 package exceptions;
 
-public class InvalidUserData extends Exception {
+public class ValidateError extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 13276090993780L;
 
-	public InvalidUserData(String message) {
+	public ValidateError(String message) {
 		super(message);
 	}
 }
