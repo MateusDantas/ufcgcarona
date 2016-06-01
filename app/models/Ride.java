@@ -3,18 +3,24 @@ package models;
 import java.util.Date;
 import java.util.Set;
 
+import play.data.format.Formats;
+
 public class Ride extends Entity {
 
-	private Route route;
-	private Set<Passenger> passengers;
-	private Driver driver;
-	
-	private Date estimatedDeparture;
-	private Date estimatedArrival;
-	
-	private int vacancy;
-	private int rideCost;
+	public Route route;
+	public Set<Passenger> passengers;
+	public Driver driver;
 
+	public Date estimatedDeparture;
+	public Date estimatedArrival;
+	
+	public int vacancy;
+	public int rideCost;
+		
+	public String validate() {
+		return null;
+	}
+	
 	public Route getRoute() {
 		return route;
 	}
@@ -23,7 +29,7 @@ public class Ride extends Entity {
 		this.route = route;
 	}
 
-	public Set<Passenger> getPassenger() {
+	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
 

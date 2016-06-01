@@ -2,8 +2,12 @@ package models;
 
 public class Route extends Entity {
 
-	private Location origin;
-	private Location destination;
+	public Location origin;
+	public Location destination;
+	
+	public String validate() {
+		return null;
+	}
 	
 	public Location getOrigin() {
 		return origin;
@@ -16,6 +20,12 @@ public class Route extends Entity {
 	}
 	public void setDestination(Location destination) {
 		this.destination = destination;
+	}
+
+	public boolean compare(Route route) {
+		if (route == null)
+			return false;
+		return this.origin.compare(route.getOrigin()) && this.destination.compare(route.getDestination());
 	}
 	
 }

@@ -17,19 +17,15 @@ import exceptions.ValidateError;
 import models.User;
 import play.Logger;
 import repository.Repository;
-import validators.Validator;
 
 @Singleton
 public class RealUserService implements UserService {
 
 	private Repository<User> userRepository;
-	private Validator<User> userValidator;
 
 	@Inject
-	public RealUserService(@Named("UserRepository") Repository<User> userRepository,
-			@Named("UserValidator") Validator<User> userValidator) {
+	public RealUserService(@Named("UserRepository") Repository<User> userRepository) {
 		this.userRepository = userRepository;
-		this.userValidator = userValidator;
 	}
 
 	@Override
@@ -37,7 +33,10 @@ public class RealUserService implements UserService {
 		if (this.getByRegistrationId(user.getRegistrationId()).isPresent()) {
 			throw new UserAlreadyRegistered("There is a user already registered with that registration id");
 		}
-		userValidator.validate(user);
+		String validateStr = user.validate();
+		if (validateStr != null) {
+			throw new ValidateError(validateStr);
+		}
 		String salt = BCrypt.gensalt();
 		String encryptedPassword = BCrypt.hashpw(user.getPassword(), salt);
 		user.setSalt(salt);

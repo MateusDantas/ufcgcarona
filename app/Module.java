@@ -2,14 +2,15 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
+import models.Ride;
 import models.User;
 import repository.Repository;
 import repository.UserInMemoryRepository;
+import repository.RideInMemoryRepository;
 import services.RealUserService;
+import services.RideService;
+import services.RealRideService;
 import services.UserService;
-import validators.UserValidator;
-import validators.Validator;
-
 /**
  * This class is a Guice module that tells Guice how to bind several
  * different types. This Guice module is created when the Play
@@ -29,14 +30,18 @@ public class Module extends AbstractModule {
     		.annotatedWith(Names.named("UserRepository"))
     		.to(UserInMemoryRepository.class)
     		.asEagerSingleton();
-        
-    	bind(new TypeLiteral<Validator<User>>() {})
-    		.annotatedWith(Names.named("UserValidator"))
-    		.to(UserValidator.class);
+    	
+    	bind(new TypeLiteral<Repository<Ride>>() {})
+		.to(RideInMemoryRepository.class)
+		.asEagerSingleton();
     		
     	bind (UserService.class)
     		.to(RealUserService.class)
     		.asEagerSingleton();
+    	
+    	bind (RideService.class)
+		.to(RealRideService.class)
+		.asEagerSingleton();
     }
 
 }

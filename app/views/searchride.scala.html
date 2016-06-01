@@ -1,0 +1,96 @@
+@(dataSets: Set[Ride], searchRideForm: play.data.Form[RideSearchForm])
+
+@import helper._
+
+@main("title") {
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<h1>Search Rides - Main Page</h1>
+@helper.form(action = routes.SearchRideController.list) {
+<div class="container">
+  @if(flash.containsKey("success")){
+  @flash.get("success")
+  }
+  @if(flash.containsKey("error")){
+  @flash.get("error")
+  }
+  <section>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4>Search Rides</h4>
+      </div>
+      <div class="panel-body">
+		@inputText(
+		searchRideForm("route.origin.streetName"),
+		'_label -> "Origin Street Addres",
+		'_help -> "Please type in your origin street address."
+		)
+		@inputText(
+		searchRideForm("route.origin.sectionName"),
+		'_label -> "Origin Section Name",
+		'_help -> "Please type in your origin secion name."
+		)
+		@inputText(
+		searchRideForm("route.origin.name"),
+		'_label -> "Origin name",
+		'_help -> "Please type in a name for this origin address (to help us aggregate all addresses)"
+		)
+		@inputText(
+		searchRideForm("route.destination.streetName"),
+		'_label -> "Destination Street Addres",
+		'_help -> "Please type in your destination street address."
+		)
+		@inputText(
+		searchRideForm("route.destination.sectionName"),
+		'_label -> "Destination Section Name",
+		'_help -> "Please type in your destination secion name."
+		)
+		@inputText(
+		searchRideForm("route.destination.name"),
+		'_label -> "Destination name",
+		'_help -> "Please type in a name for this destination address (to help us aggregate all addresses)"
+		)
+		@inputText(
+		searchRideForm("day"),
+		'_label -> "Day to search",
+		'_help -> "Please type in an estimated departure time",
+		'type -> "datetime-local"
+		)
+		<input type="submit" class="btn btn-success">
+		<a href="/" class="btn btn-warning">Home</a>
+	  </div>
+	</div>
+  </section>
+</div>
+}
+<h2>@dataSets.size() Rides Found</h2>
+<div style="overflow-y:scroll">
+  <table class="table table-striped table-bordered table-condensed tablesorter" id ="myTable">
+	<thead>
+	  <tr>
+		<th style = "vertical-align: top;" class="col-md-1">N. Passengers</th>
+		<th style = "vertical-align: top;" class="col-md-0">Origin</th>
+		<th style = "vertical-align: top;" class="col-md-0">Dest</th>
+		<th style = "vertical-align: top;" class="col-md-0">Departure</th>		
+		<th style = "vertical-align: top;" class="col-md-0">Arrival</th>		
+		<th style = "vertical-align: top;" class="col-md-0">Join</th>		
+	  </tr>
+	</thead>
+	<tbody>
+	  @for(dataSet <- dataSets){
+					  <tr>
+						<td><font size="2">@dataSet.getPassengers().size()</font></td>
+						<td><font size="2">@dataSet.getRoute().getOrigin().getName()</font></td>
+						<td><font size="2">@dataSet.getRoute().getDestination().getName()</font></td>
+						<td><font size="2">@dataSet.getEstimatedDeparture()</font></td>
+						<td><font size="2">@dataSet.getEstimatedArrival()</font></td>
+						<td><font size="2"><a href="/rides/join/@dataSet.getId()" class="btn btn-success">Join</a></font></td>
+					  </tr>
+					  
+					  }
+	</tbody>
+  </table>
+</div>
+<a href="/" class="btn btn-success">Home</a>
+}
+

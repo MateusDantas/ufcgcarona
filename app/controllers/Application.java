@@ -2,6 +2,7 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.RideService;
 import services.UserService;
 
 import views.html.*;
@@ -10,6 +11,8 @@ import play.mvc.Security;
 
 import javax.inject.Inject;
 
+import models.Driver;
+import models.Ride;
 import models.User;
 import play.data.Form;
 
@@ -17,10 +20,13 @@ import play.data.Form;
 public class Application extends Controller {
 
 	@Inject private UserService userService;
+	@Inject private RideService rideService;
 
 	@Security.Authenticated(Secured.class)
 	public Result index() {
-		return ok(index.render("Your new application is ready."));
+		Driver driver = new Driver();
+		driver.setRegistrationId(request().username());
+		return ok(index.render(rideService.getUserRides(driver), Form.form(Ride.class)));
 	}
 
 	public Result login() {

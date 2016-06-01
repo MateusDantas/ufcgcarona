@@ -12,5 +12,13 @@ POST	/signup/register			controllers.SignupController.register()
 GET		/login						controllers.Application.login()
 POST	/login/authenticate			controllers.Application.authenticate()
 
+GET		/rides/create				controllers.CreateRideController.create()
+POST	/rides/register				controllers.CreateRideController.register()
+
+GET		/rides/search				controllers.SearchRideController.search()
+POST	/rides/search/list			controllers.SearchRideController.list()
+
+GET		/rides/join/:id				controllers.JoinRideController.join(id: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

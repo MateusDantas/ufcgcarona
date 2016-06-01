@@ -1,20 +1,42 @@
-@*
- * This template takes a single argument, a String containing a
- * message to display.
- *@
-@(message: String)
+@(dataSets: Set[Ride], dataSetForm: play.data.Form[Ride])
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("Welcome to Play") {
-
-    @*
-     * Get an `Html` object by calling the built-in Play welcome
-     * template and passing a `String` message.
-     *@
-    @play20.welcome(message, style = "Java")
-
+@main("title") {
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<h1>My Rides - Main Page</h1>
+<h2>@dataSets.size() Rides Found</h2>
+@if(flash.containsKey("success")){
+  @flash.get("success")
+  }
+  @if(flash.containsKey("error")){
+  @flash.get("error")
+  }
+<div style="overflow-y:scroll">
+  <table class="table table-striped table-bordered table-condensed tablesorter" id ="myTable">
+	<thead>
+	  <tr>
+		<th style = "vertical-align: top;" class="col-md-1">N. Passengers</th>
+		<th style = "vertical-align: top;" class="col-md-0">Origin</th>
+		<th style = "vertical-align: top;" class="col-md-0">Dest</th>
+		<th style = "vertical-align: top;" class="col-md-0">Departure</th>		
+		<th style = "vertical-align: top;" class="col-md-0">Arrival</th>				
+	  </tr>
+	</thead>
+	<tbody>
+	  @for(dataSet <- dataSets){
+					  <tr>
+						<td><font size="2">@dataSet.getPassengers().size()</font></td>
+						<td><font size="2">@dataSet.getRoute().getOrigin().getName()</font></td>
+						<td><font size="2">@dataSet.getRoute().getDestination().getName()</font></td>
+						<td><font size="2">@dataSet.getEstimatedDeparture()</font></td>
+						<td><font size="2">@dataSet.getEstimatedArrival()</font></td>	
+					  </tr>
+					  
+					  }
+	</tbody>
+  </table>
+</div>
+<a href="/rides/create" class="btn btn-success">Create Ride</a>
+<a href="/rides/search" class="btn btn-warning">Search Ride</a>
 }
+

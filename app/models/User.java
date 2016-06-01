@@ -1,5 +1,9 @@
 package models;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 public class User extends Entity {
 
 	private String name;
@@ -8,6 +12,22 @@ public class User extends Entity {
 	private String salt;
 	private String course;
 
+	public String validate() {
+		Pattern pattern = Pattern.compile("11[0-9]{1}110[0-9]{3}");
+		Matcher matcher = pattern.matcher(this.getRegistrationId());
+		
+		if (!matcher.matches())
+			return "The registration id provided is invalid";
+		if (this.getPassword().length() < 6)
+			return "The password is invalid (must have at least 6 characters).";
+		if (this.getName().length() < 3)
+			return "The name provided is invalid (must have at least 3 characters).";
+		if (this.getCourse().isEmpty())
+			return "The course provided is invalid (must not be empty).";
+		
+		return null;
+	}
+	
 	public String getName() {
 		return name;
 	}
