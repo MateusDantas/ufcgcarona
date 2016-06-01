@@ -3,8 +3,12 @@ package models;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.Entity;
 
-public class User extends Entity {
+import com.avaje.ebean.Finder;
+
+@Entity
+public class User extends Identity {
 
 	private String name;
 	private String registrationId; // matricula
@@ -27,7 +31,9 @@ public class User extends Entity {
 		
 		return null;
 	}
-	
+
+	public static Finder<String, User> find = new Finder<String,User>(User.class);
+
 	public String getName() {
 		return name;
 	}

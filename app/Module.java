@@ -5,8 +5,8 @@ import com.google.inject.name.Names;
 import models.Ride;
 import models.User;
 import repository.Repository;
-import repository.UserInMemoryRepository;
-import repository.RideInMemoryRepository;
+import repository.RideEbeanRepository;
+import repository.UserEbeanRepository;
 import services.RealUserService;
 import services.RideService;
 import services.RealRideService;
@@ -28,11 +28,11 @@ public class Module extends AbstractModule {
     	
     	bind(new TypeLiteral<Repository<User>>() {})
     		.annotatedWith(Names.named("UserRepository"))
-    		.to(UserInMemoryRepository.class)
+    		.to(UserEbeanRepository.class)
     		.asEagerSingleton();
     	
     	bind(new TypeLiteral<Repository<Ride>>() {})
-		.to(RideInMemoryRepository.class)
+		.to(RideEbeanRepository.class)
 		.asEagerSingleton();
     		
     	bind (UserService.class)

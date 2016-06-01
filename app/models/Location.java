@@ -1,6 +1,9 @@
 package models;
 
-public class Location extends Entity {
+import javax.persistence.Entity;
+
+@Entity
+public class Location extends Identity {
 
 	public String name;
 	public String streetName;

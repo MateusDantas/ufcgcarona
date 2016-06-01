@@ -3,10 +3,15 @@ package models;
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class Entity {
+import javax.persistence.*;
+
+@Entity
+public abstract class Identity {
+	
+	@Id
 	private String id;
 	
-	public Entity() {
+	public Identity() {
 		this.id = UUID.randomUUID().toString();
 	}
 
@@ -23,7 +28,7 @@ public abstract class Entity {
         if (this == obj) return true;
         if (obj == null || this.getClass() != obj.getClass()) return false;
         
-        Entity entity = (Entity) obj;
+        Identity entity = (Identity) obj;
         return this.getId() == entity.getId();
     }
 

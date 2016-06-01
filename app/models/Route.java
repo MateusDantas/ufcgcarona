@@ -1,6 +1,9 @@
 package models;
 
-public class Route extends Entity {
+import javax.persistence.Entity;
+
+@Entity
+public class Route extends Identity {
 
 	public Location origin;
 	public Location destination;

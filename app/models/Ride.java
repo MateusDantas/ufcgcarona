@@ -3,9 +3,12 @@ package models;
 import java.util.Date;
 import java.util.Set;
 
-import play.data.format.Formats;
+import javax.persistence.Entity;
 
-public class Ride extends Entity {
+import com.avaje.ebean.Finder;
+
+@Entity
+public class Ride extends Identity {
 
 	public Route route;
 	public Set<Passenger> passengers;
@@ -20,6 +23,8 @@ public class Ride extends Entity {
 	public String validate() {
 		return null;
 	}
+	
+	public static Finder<String, Ride> find = new Finder<String,Ride>(Ride.class);
 	
 	public Route getRoute() {
 		return route;

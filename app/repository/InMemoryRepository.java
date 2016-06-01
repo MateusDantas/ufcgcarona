@@ -6,13 +6,18 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import models.Entity;
+import models.Identity;
 
-public abstract class InMemoryRepository<T extends Entity> implements Repository<T> {
+public abstract class InMemoryRepository<T extends Identity> implements Repository<T> {
 
 	private Set<T> memory = new HashSet<>();
-
+	
 	@Override
+	public Set<T> get() {
+		return memory;
+	}
+	
+ 	@Override
 	public Optional<T> get(String id) {
 		return memory.stream().filter(entity -> entity.getId().equals(id)).findFirst();
 	}
